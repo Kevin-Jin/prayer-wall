@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['loggedInUserId']) && isset($_COOKIE['auth'])) {
+	require_once('includes/loginFunctions.php');
+	loadCookie();
+}
+define("allowEntry", true);
 $title = 'Posts - thePRAYERwall';
 $head = <<<HEADEND
 
@@ -22,6 +28,5 @@ $body = <<<BODYEND
 			</ul>
 BODYEND;
 
-define("allowEntry", true);
 require 'includes/pageTemplate.php';
 ?>

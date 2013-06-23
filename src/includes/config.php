@@ -3,7 +3,7 @@ if (!defined("allowEntry"))
 	require_once('hackingAttempt.php');
 
 class config {
-	private static $CFG_FILE = '../../config.ini';
+	private static $CFG_FILE = '/../config.ini';
 
 	public $dbHost;
 	public $dbUser;

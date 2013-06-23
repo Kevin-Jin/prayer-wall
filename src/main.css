@@ -1,0 +1,91 @@
+body {
+	background-color: #FAFAFA;
+	font-family: sans-serif;
+	background-image: url('brick.jpg');
+	background-color: #A6744F;
+	background-repeat: repeat;
+	margin: 0;
+}
+
+#top, #bottom, #middle {
+	width: 768px;
+	margin: 0 auto;
+	background-color: #F3F3F3;
+	padding: 10px;
+	opacity: 0.9;
+}
+
+#top {
+	margin-top: 10px;
+}
+
+#top h1, #top #login {
+	display: inline-block;
+}
+
+#top h1 {
+	float: left;
+}
+
+#top #login {
+	float: right;
+}
+
+#top #login #login_form, #top #login #login_form #register {
+	font-size: 8pt;
+}
+
+#top #login #login_form input.submit {
+	width: 100%;
+}
+
+#top #login #login_form input#register {
+	background: transparent;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#top br.clearfloat {
+	clear: both;
+}
+
+#top ul#nav {
+	text-align: center;
+	background-color: #EAEAEA;
+	padding: 0;
+	margin: 0;
+}
+
+#top ul#nav li {
+	display: inline-block;
+	padding: 10px 0;
+}
+
+#top ul#nav a {
+	text-decoration: none;
+	color: #000000;
+}
+
+#top ul#nav li + li:before {
+	content: " | ";
+	font-weight: bold;
+	color: #FAFAFA;
+	padding: 10px 1px;
+}
+
+#top ul#nav li:hover {
+	background-color: #DADADA;
+}
+
+#top ul#nav li + li:hover:before {
+	background-color: #EAEAEA;
+}
+
+#bottom {
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+#bottom p {
+	margin: 0;
+}

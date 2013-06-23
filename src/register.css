@@ -1,0 +1,32 @@
+form fieldset, form input#regsubmit {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+form input#regsubmit {
+	margin-top: 10px;
+	font-size: 14pt;
+	height: 50px;
+}
+
+form fieldset {
+	overflow: hidden;
+	width: 640px;
+}
+
+form fieldset label {
+	float: left;
+	width: 150px;
+}
+
+form fieldset input, form fieldset select {
+	width: 190px;
+}
+
+form fieldset p.hint {
+	float: right;
+	width: 280px;
+	margin: 0;
+	font-size: 8pt;
+}

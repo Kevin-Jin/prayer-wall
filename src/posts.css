@@ -4,6 +4,25 @@
 	background-color: transparent;
 	opacity: 1;
 	padding: 0;
+	margin-bottom: 100px;
+}
+
+ul.board {
+	padding: 16px 1% 0;
+	list-style: none;
+}
+
+ul.board li {
+	display: inline-block;
+	vertical-align: top;
+
+	/*float: left;*/
+
+	width: 200px;
+	background-color: #FFFF88;
+	margin: 10px;
+	min-height: 150px;
+	padding: 10px;
 }
 
 #bottom {

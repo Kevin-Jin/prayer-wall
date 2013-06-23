@@ -4,6 +4,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css" href="main.css">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js" ></script>
 		<title><?php echo $title; ?></title><?php echo $head; ?>
 
 	</head>
@@ -27,7 +28,7 @@
 			<br class="clearfloat">
 			<ul id="nav">
 				<li><a href="index.php">Home</a></li>
-				<li><a href="#">the ORIGINAL PRAYER wall</a></li>
+				<li><a href="//bit.ly/theprayerwall">the ORIGINAL PRAYER wall</a></li>
 				<li><a href="#">Prayer Boards</a></li>
 				<li><a href="#">Prayer Resources</a></li>
 				<li><a href="#">Blog</a></li>

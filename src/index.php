@@ -22,5 +22,6 @@ $body = <<<BODYEND
 			</ul>
 BODYEND;
 
-require 'pageTemplate.php';
+define("allowEntry", true);
+require 'includes/pageTemplate.php';
 ?>

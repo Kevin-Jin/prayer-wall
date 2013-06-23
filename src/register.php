@@ -18,7 +18,8 @@ function commit() {
 			<p>You will be transferred to the front page shortly. Click <a href="index.php">here</a> if you are not redirected within 5 seconds.</p>
 BODYEND;
 
-	require 'pageTemplate.php';
+	define("allowEntry", true);
+	require 'includes/pageTemplate.php';
 }
 
 if (count($_GET) > 0) {
@@ -64,5 +65,6 @@ $body = <<<BODYEND
 			</form>
 BODYEND;
 
-require 'pageTemplate.php';
+define("allowEntry", true);
+require 'includes/pageTemplate.php';
 ?>

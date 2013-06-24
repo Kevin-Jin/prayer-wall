@@ -19,7 +19,7 @@ body {
 	margin-top: 10px;
 }
 
-#top h1, #top #login {
+#top h1, #top #user {
 	display: inline-block;
 }
 
@@ -27,22 +27,26 @@ body {
 	float: left;
 }
 
-#top #login {
+#top #user {
 	float: right;
 }
 
-#top #login #login_form, #top #login #login_form #register {
+#top #user #login_form, #top #user #login_form #register {
 	font-size: 8pt;
 }
 
-#top #login #login_form input.submit {
+#top #user #login_form input.submit {
 	width: 100%;
 }
 
-#top #login #login_form input#register {
+#top #user #login_form input#register {
 	background: transparent;
 	text-decoration: underline;
 	cursor: pointer;
+}
+
+#top #persistent {
+	vertical-align: middle;
 }
 
 #top br.clearfloat {

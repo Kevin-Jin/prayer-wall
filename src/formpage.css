@@ -1,10 +1,10 @@
-form fieldset, form input#regsubmit {
+form fieldset, form input#submit {
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
 }
 
-form input#regsubmit {
+form input#submit {
 	margin-top: 10px;
 	font-size: 14pt;
 	height: 50px;

@@ -23,7 +23,7 @@ function nickExists($nick) {
 
 function idcheck() {
 	$checknick = false;
-	if (count($_GET) !== 1 || !($checkemail = array_key_exists('checkemail', $_GET)) && !($checknick = array_key_exists('checknick', $_GET)))
+	if (count($_GET) !== 1 || !($checkemail = isset($_GET['checkemail'])) && !($checknick = isset($_GET['checknick'])))
 		require_once('hackingAttempt.php');
 
 	define("allowEntry", true);
@@ -137,21 +137,23 @@ function makeAccount($email, $password, $nick) {
 	$ps->execute();
 	$userid = $con->insert_id;
 	$ps->close();
+	$con->close();
 
 	return $userid;
 }
 
 function commit() {
-	if (!array_key_exists('email', $_POST) || !array_key_exists('password', $_POST) || !array_key_exists('nick', $_POST))
-		//TODO: hacking attempt
-		return;
+	if (!isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['nick']))
+		require_once('includes/hackingAttempt.php');
 
+	define("allowEntry", true);
 	session_start();
 	if (!isset($_SESSION['loggedInUserId']) && isset($_COOKIE['auth'])) {
 		require_once('includes/loginFunctions.php');
 		loadCookie();
 	}
-	define("allowEntry", true);
+	if (isset($_SESSION['loggedInUserId']))
+		require_once('includes/hackingAttempt.php');
 	$title = 'Register - thePRAYERwall';
 	$head = '';
 	$email = $_POST['email'];
@@ -218,6 +220,7 @@ BODYEND;
 	}
 	if ($allOk) {
 		$_SESSION['loggedInUserId'] = makeAccount($email, $password, $nick);
+		$_SESSION['loggedInNick'] = $nick;
 		$head = <<<HEADEND
 
 		<meta http-equiv="Refresh" content="3; index.php" />
@@ -240,16 +243,18 @@ if (count($_POST) > 0) {
 	return;
 }
 
+define("allowEntry", true);
 session_start();
 if (!isset($_SESSION['loggedInUserId']) && isset($_COOKIE['auth'])) {
 	require_once('includes/loginFunctions.php');
 	loadCookie();
 }
-define("allowEntry", true);
+if (isset($_SESSION['loggedInUserId']))
+	require_once('includes/hackingAttempt.php');
 $title = 'Register - thePRAYERwall';
 $head = <<<HEADEND
 
-		<link rel="stylesheet" type="text/css" href="register.css">
+		<link rel="stylesheet" type="text/css" href="formpage.css">
 		<script type="text/javascript" src="register.js"></script>
 HEADEND;
 $body = <<<BODYEND
@@ -275,7 +280,7 @@ $body = <<<BODYEND
 					<input type="text" id="nick" name="nick" maxlength="20">
 					<br style="clear: both">
 				</fieldset>
-				<input type="submit" id="regsubmit" name="register" value="Register">
+				<input type="submit" id="submit" name="register" value="Register">
 			</form>
 BODYEND;
 

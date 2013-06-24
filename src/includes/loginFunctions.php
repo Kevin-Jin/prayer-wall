@@ -10,15 +10,14 @@ function loadCookie() {
 
 	require_once('databaseManager.php');
 	$con = makeDatabaseConnection();
-	$ps = $con->prepare("SELECT `userid`,`tokenhash` FROM `cookies` WHERE `uniqueid` = ?");
+	$ps = $con->prepare("SELECT `u`.`userid`,`displayname`,`tokenhash` FROM `cookies` `c` LEFT JOIN `users` `u` ON `u`.`userid` = `c`.`userid` WHERE `uniqueid` = ?");
 	$ps->bind_param('i', $uid);
 	if ($ps->execute()) {
-		$ps->bind_result($userid, $hash);
+		$ps->bind_result($userid, $displayname, $hash);
 		if ($ps->fetch()) {
 			require_once('hashFunctions.php');
 			$correct = checkBcryptHash($hash, $token);
 		}
-		$rs->close();
 	}
 	$ps->close();
 
@@ -29,6 +28,7 @@ function loadCookie() {
 
 	if ($correct) {
 		$_SESSION['loggedInUserId'] = $userid;
+		$_SESSION['loggedInNick'] = $displayname;
 		createNewCookie($con);
 	}
 

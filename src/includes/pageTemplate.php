@@ -15,7 +15,7 @@ if (!defined("allowEntry"))
 	<body>
 		<div id="top">
 			<h1 id="logo">thePRAYERwall</h1>
-			<form id="login" method="post" action="#">
+			<form id="user" method="post" action="#">
 				<table id="login_form">
 					<tr>
 						<td><label for="usr">Email Address</label></td>
@@ -23,9 +23,13 @@ if (!defined("allowEntry"))
 						<td><a href="register.php"><input type="button" name="signup" value="Register" class="submit" id="register"></a></td>
 					</tr>
 					<tr>
-						<td><input type="text" id="usr" name="email"></td>
-						<td><input type="password" id="pwd" name="password"></td>
+						<td><input type="text" id="usr" name="email" maxlength="254"></td>
+						<td><input type="password" id="pwd" name="password" maxlength="32"></td>
 						<td><input type="submit" name="signin" value="Login" class="submit"></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="persistent" name="persistent" value="1"><label for="persistent">Remember me</label></td>
+						<td><a href="#">I forgot my password</a></td>
 					</tr>
 				</table>
 			</form>

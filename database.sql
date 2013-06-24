@@ -1,10 +1,15 @@
+ DROP TABLE IF EXISTS `cookies`;
+ DROP TABLE IF EXISTS `posts`;
+DROP TABLE IF EXISTS `users`;
+
 CREATE TABLE `users` (
 	`userid` INT(11) NOT NULL AUTO_INCREMENT,
 	`email` VARCHAR(254) NOT NULL,
 	`password` BINARY(60) NOT NULL,
-	`displayname` VARCHAR(255),
+	`displayname` VARCHAR(20),
 	PRIMARY KEY (`userid`),
-	KEY (`email`)
+	KEY (`email`),
+	KEY (`displayname`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `posts` (

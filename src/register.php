@@ -4,24 +4,35 @@ function emailExists($email) {
 	$con = makeDatabaseConnection();
 	$ps = $con->prepare("SELECT 1 FROM `users` WHERE `email` = ?");
 	$ps->bind_param('s', $email);
-	if ($ps->execute()) {
-		$rs = $ps->get_result();
-		if (!$rs->fetch_array())
-			return false;
-	}
+	$exists = !$ps->execute() || $ps->fetch();
 	$ps->close();
 	$con->close();
-	return true;
+	return $exists;
 }
 
-function namecheck() {
-	if (!array_key_exists('checkname', $_GET))
-		//TODO: hacking attempt
-		return;
+function nickExists($nick) {
+	require_once('includes/databaseManager.php');
+	$con = makeDatabaseConnection();
+	$ps = $con->prepare("SELECT 1 FROM `users` WHERE `displayname` = ?");
+	$ps->bind_param('s', $nick);
+	$exists = !$ps->execute() || $ps->fetch();
+	$ps->close();
+	$con->close();
+	return $exists;
+}
+
+function idcheck() {
+	$checknick = false;
+	if (count($_GET) !== 1 || !($checkemail = array_key_exists('checkemail', $_GET)) && !($checknick = array_key_exists('checknick', $_GET)))
+		require_once('hackingAttempt.php');
 
 	define("allowEntry", true);
-	if (emailExists($_GET['checkname']))
-		echo $_GET['checkname'];
+	if ($checkemail)
+		if (emailExists($_GET['checkemail']))
+			echo $_GET['checkemail'];
+	if ($checknick)
+		if (nickExists($_GET['checknick']))
+			echo $_GET['checknick'];
 	echo '';
 }
 
@@ -194,6 +205,17 @@ HEADEND;
 			<p>You will be returned to the registration form shortly. Click <a href="register.php">here</a> if you are not redirected within 3 seconds.</p>
 BODYEND;
 	}
+	if ($allOk && nickExists($nick)) {
+		$allOk = false;
+		$head = <<<HEADEND
+
+		<meta http-equiv="Refresh" content="3; register.php" />
+HEADEND;
+		$body = <<<BODYEND
+			<p>Correct your nickname. $nick is already in use</p>
+			<p>You will be returned to the registration form shortly. Click <a href="register.php">here</a> if you are not redirected within 3 seconds.</p>
+BODYEND;
+	}
 	if ($allOk) {
 		$_SESSION['loggedInUserId'] = makeAccount($email, $password, $nick);
 		$head = <<<HEADEND
@@ -209,7 +231,7 @@ BODYEND;
 }
 
 if (count($_GET) > 0) {
-	namecheck();
+	idcheck();
 	return;
 }
 

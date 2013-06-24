@@ -13,11 +13,10 @@ function loadCookie() {
 	$ps = $con->prepare("SELECT `userid`,`tokenhash` FROM `cookies` WHERE `uniqueid` = ?");
 	$ps->bind_param('i', $uid);
 	if ($ps->execute()) {
-		$rs = $ps->get_result();
-		if ($array = $rs->fetch_array()) {
+		$ps->bind_result($userid, $hash);
+		if ($ps->fetch()) {
 			require_once('hashFunctions.php');
-			$userid = $array[0];
-			$correct = checkBcryptHash($array[1], $token);
+			$correct = checkBcryptHash($hash, $token);
 		}
 		$rs->close();
 	}

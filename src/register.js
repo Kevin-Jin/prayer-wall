@@ -83,7 +83,7 @@ function updateEmailHint(e) {
 		return;
 	}
 
-	$.get("register.php?checkname=" + $(this).val(), function(resp) {
+	$.get("register.php?checkemail=" + $(this).val(), function(resp) {
 		if (resp !== "") { //we'll return an empty string for no conflicts
 			emailOk = false;
 			updateSubmitButton();
@@ -140,22 +140,29 @@ function nickProblem(nick) {
 }
 
 function updateNickHint(e) {
+	nickOk = false;
+	updateSubmitButton();
 	if ($(this).val().length === 0) {
-		nickOk = false;
-		updateSubmitButton();
 		$("#nickhint").css("color", "black").html("This is how you will be identified in your posts");
 		return;
 	}
 	var prob = nickProblem($(this).val());
 	if (prob !== null) {
-		nickOk = false;
-		updateSubmitButton();
 		$("#nickhint").css("color", "red").html("✘ " + prob);
-	} else {
-		nickOk = true;
-		updateSubmitButton();
-		$("#nickhint").css("color", "green").html("✔");
+		return;
 	}
+
+	$.get("register.php?checknick=" + $(this).val(), function(resp) {
+		if (resp !== "") { //we'll return an empty string for no conflicts
+			nickOk = false;
+			updateSubmitButton();
+			$("#nickhint").css("color", "red").html("✘ " + resp + " is already in use");
+		} else {
+			nickOk = true;
+			updateSubmitButton();
+			$("#nickhint").css("color", "green").html("✔");
+		}
+	});
 }
 
 $(document).ready(function() {

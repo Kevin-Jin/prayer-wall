@@ -8,7 +8,7 @@ if (!defined("allowEntry"))
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css" href="main.css">
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js" ></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 		<title><?php echo $title; ?></title><?php echo $head; ?>
 
 	</head>
@@ -31,7 +31,7 @@ if (!isset($_SESSION['loggedInUserId'])) {
 						<td><input type="submit" name="signin" value="Login" class="submit"></td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" id="remember" name="persistent" value="1"><label for="persistent">Remember me</label></td>
+						<td><input type="checkbox" id="remember" name="persistent" value="1"><label for="remember">Remember me</label></td>
 						<td><a href="#">I forgot my password</a></td>
 					</tr>
 				</table>

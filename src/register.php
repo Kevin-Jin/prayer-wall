@@ -280,7 +280,7 @@ $body = <<<BODYEND
 					<input type="text" id="nick" name="nick" maxlength="20">
 					<br style="clear: both">
 				</fieldset>
-				<input type="submit" id="submit" name="register" value="Register">
+				<div><input type="submit" id="submit" name="register" value="Register"></div>
 			</form>
 BODYEND;
 

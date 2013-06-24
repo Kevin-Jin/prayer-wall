@@ -97,12 +97,12 @@ $body = <<<BODYEND
 					<input type="password" id="password" name="password" maxlength="32">
 					<br style="clear: both">
 
-					<label for="persistent">Persistent:</label>
+					<label for="persistent">Remember me:</label>
 					<p class="hint" id="persistenthint"></p>
 					<input type="checkbox" id="persistent" name="persistent">
 					<br style="clear: both">
 				</fieldset>
-				<input type="submit" id="submit" name="login" value="Login">
+				<div><input type="submit" id="submit" name="login" value="Login"></div>
 			</form>
 BODYEND;
 

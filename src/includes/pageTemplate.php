@@ -15,7 +15,10 @@ if (!defined("allowEntry"))
 	<body>
 		<div id="top">
 			<h1 id="logo">thePRAYERwall</h1>
-			<form id="user" method="post" action="#">
+<?php
+if (!isset($_SESSION['loggedInUserId'])) {
+	echo <<<LOGINFORMEND
+			<form id="user" method="post" action="login.php">
 				<table id="login_form">
 					<tr>
 						<td><label for="usr">Email Address</label></td>
@@ -28,11 +31,24 @@ if (!defined("allowEntry"))
 						<td><input type="submit" name="signin" value="Login" class="submit"></td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" id="persistent" name="persistent" value="1"><label for="persistent">Remember me</label></td>
+						<td><input type="checkbox" id="remember" name="persistent" value="1"><label for="persistent">Remember me</label></td>
 						<td><a href="#">I forgot my password</a></td>
 					</tr>
 				</table>
 			</form>
+
+LOGINFORMEND;
+} else {
+	$name = $_SESSION['loggedInNick'];
+	echo <<<PROFILEEND
+			<div id="user">
+				<p>Welcome back, $name</p>
+				<p><a href="logout.php">Log out</a>
+			</div>
+
+PROFILEEND;
+}
+?>
 			<br class="clearfloat">
 			<ul id="nav">
 				<li><a href="index.php">Home</a></li>

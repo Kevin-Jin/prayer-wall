@@ -20,9 +20,16 @@ ul.board li {
 
 	width: 200px;
 	background-color: #FFFF88;
-	margin: 10px;
+	margin: 2px;
 	min-height: 150px;
 	padding: 10px;
+}
+
+input#nextpage {
+	height: 64px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #bottom {

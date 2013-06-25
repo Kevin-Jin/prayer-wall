@@ -10,6 +10,7 @@ class config {
 	public $dbPass;
 	public $dbName;
 	public $bcryptRounds;
+	public $notesPerPage;
 
 	private function __construct($configFile) {
 		$props = parse_ini_file($configFile, true);
@@ -18,6 +19,7 @@ class config {
 		$this->dbPass = $props['dbpass'];
 		$this->dbName = $props['dbname'];
 		$this->bcryptRounds = $props['bcryptrounds'];
+		$this->notesPerPage = $props['notesperpage'];
 	}
 
 	private static $instance;

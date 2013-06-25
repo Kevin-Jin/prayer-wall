@@ -1,4 +1,44 @@
 <?php
+function fetchPosts(&$lastLoadedPost) {
+	require_once('includes/databaseManager.php');
+	require_once('includes/config.php');
+
+	$con = makeDatabaseConnection();
+	$ps = $con->prepare("SELECT `postid`,`posttime`,`message`,`poster` FROM `posts` WHERE `postid` < ? ORDER BY `postid` DESC LIMIT ?");
+	$upperbound = isset($lastLoadedPost) ? $lastLoadedPost : 0x80000000;
+	$ps->bind_param('ii', $upperbound, Config::getInstance()->notesPerPage);
+	$str = '';
+	if ($ps->execute()) {
+		$ps->bind_result($lastLoadedPost, $posttime, $message, $poster);
+		for ($i = 0; $ps->fetch(); $i++)
+			$str .= '				<li>' . $message . '</li>
+';
+	}
+	$ps->close();
+	if ($i < Config::getInstance()->notesPerPage) {
+		$lastLoadedPost = -1;
+	} else {
+		$ps = $con->prepare("SELECT EXISTS(SELECT 1 FROM `posts` WHERE `postid` < ?)");
+		$ps->bind_param('i', $lastLoadedPost);
+		if ($ps->execute()) {
+			$ps->bind_result($more);
+			$ps->fetch();
+			if (!$more)
+				$lastLoadedPost = -1;
+		}
+		$ps->close();
+	}
+	$con->close();
+	return $str;
+}
+
+if (isset($_GET['scroll'])) {
+	define("allowEntry", true);
+	echo fetchPosts($_GET['start']);
+	echo "<a id=\"#nextpagelink\" href=\"index.php?start={$_GET["start"]}&scroll\"></a>";
+	return;
+}
+
 define("allowEntry", true);
 session_start();
 if (!isset($_SESSION['loggedInUserId']) && isset($_COOKIE['auth'])) {
@@ -14,19 +54,18 @@ $head = <<<HEADEND
 HEADEND;
 $body = <<<BODYEND
 			<ul class="board">
-				<li>1. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
-				<li>2. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
-				<li>3. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-				<li>4. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li>
-				<li>5. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
-				<li>6. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
-				<li>7. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
-				<li>8. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
-				<li>9. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-				<li>10.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li>
-				<li>11.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li>
+
+BODYEND;
+$body .= fetchPosts($_GET['start']);
+$body .= <<<BODYEND
 			</ul>
 BODYEND;
+if ($_GET['start'] !== -1) {
+	$body .= <<<BODYEND
+
+			<form method="get" action="index.php"><input type="hidden" name="start" value="{$_GET['start']}"><input id="nextpage" type="submit" value="Next page"></form>
+BODYEND;
+}
 
 require 'includes/pageTemplate.php';
 ?>

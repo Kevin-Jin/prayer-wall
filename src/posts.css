@@ -7,12 +7,12 @@
 	margin-bottom: 100px;
 }
 
-ul.board {
+.board {
 	padding: 16px 1% 0;
 	list-style: none;
 }
 
-ul.board li {
+.board .note {
 	display: inline-block;
 	vertical-align: top;
 

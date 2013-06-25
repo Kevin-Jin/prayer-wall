@@ -11,7 +11,7 @@ function fetchPosts(&$lastLoadedPost) {
 	if ($ps->execute()) {
 		$ps->bind_result($lastLoadedPost, $posttime, $message, $poster);
 		for ($i = 0; $ps->fetch(); $i++)
-			$str .= '				<li>' . $message . '</li>
+			$str .= '				<div class="note">' . $message . '</div>
 ';
 	}
 	$ps->close();
@@ -35,7 +35,7 @@ function fetchPosts(&$lastLoadedPost) {
 if (isset($_GET['scroll'])) {
 	define("allowEntry", true);
 	echo fetchPosts($_GET['start']);
-	echo "<a id=\"#nextpagelink\" href=\"index.php?start={$_GET["start"]}&scroll\"></a>";
+	echo "<input id=\"start\" type=\"hidden\" name=\"start\" value=\"{$_GET['start']}\">";
 	return;
 }
 
@@ -53,17 +53,17 @@ $head = <<<HEADEND
 		<script type="text/javascript" src="posts.js"></script>
 HEADEND;
 $body = <<<BODYEND
-			<ul class="board">
+			<div class="board">
 
 BODYEND;
 $body .= fetchPosts($_GET['start']);
 $body .= <<<BODYEND
-			</ul>
+			</div>
 BODYEND;
 if ($_GET['start'] !== -1) {
 	$body .= <<<BODYEND
 
-			<form method="get" action="index.php"><input type="hidden" name="start" value="{$_GET['start']}"><input id="nextpage" type="submit" value="Next page"></form>
+			<form id="nextpageform" method="get" action="index.php"><div><input id="start" type="hidden" name="start" value="{$_GET['start']}"><input id="nextpage" type="submit" value="Next page"></div></form>
 BODYEND;
 }
 

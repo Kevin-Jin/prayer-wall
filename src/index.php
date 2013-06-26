@@ -49,7 +49,7 @@ $title = 'Posts - thePRAYERwall';
 $head = <<<HEADEND
 
 		<link rel="stylesheet" type="text/css" href="posts.css">
-		<script type="text/javascript" src="masonry.pkgd.min.js"></script>
+		<script type="text/javascript" src="jquery.isotope.min.js"></script>
 		<script type="text/javascript" src="posts.js"></script>
 HEADEND;
 $body = <<<BODYEND

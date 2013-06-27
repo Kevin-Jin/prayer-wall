@@ -29,6 +29,17 @@ function loadMore() {
 	});
 }
 
+function enableConfirmLeave() {
+	$(window).bind('beforeunload', function() {
+		if ($('#newmessage').val().trim().length !== 0 || $('#newtitle').val().trim().length !== 0)
+			return 'Your post has not yet been submitted. The draft will be discarded.';
+	});
+}
+
+function disableConfirmLeave() {
+	$(window).unbind('beforeunload');
+}
+
 //begin code for centered masonry
 $.Isotope.prototype._getCenteredMasonryColumns = function() {
 	this.width = this.element.width();
@@ -83,6 +94,62 @@ $(document).ready(function() {
 		end = true;
 	}
 	$('.board').append($('<p id="loading" style="background-color: white; position: fixed; right: 20px; bottom: 20px; display: none; z-index: 1; font-size: 20pt">Loading more posts...</p>'));
+
+	$('body').append('<div id="dimmer"></div>').keyup(function(e) {
+		if ($('#dimmer').css('display') !== 'none' && e.keyCode === 27) {
+			$('#newmessage').val($('#newmessage').val().trim()).trigger('autosize.resize');;
+			$('#dimmer').fadeOut(100);
+			$('.board').isotope('reLayout');
+			$('textarea, input').blur();
+		}
+	});
+	$('#dimmer').click(function() {
+		$('#newmessage').val($('#newmessage').val().trim()).trigger('autosize.resize');;
+		$('#dimmer').fadeOut(100);
+		$('.board').isotope('reLayout');
+	});
+	$('#composecontainer').css('z-index', '3').append($('<input type="hidden" name="echo" value="1">')).click(function() {
+		$('#dimmer').fadeIn(200);
+	});
+	$('#newtitle').keyup(function() {
+		if ($(this).val().trim().length === 0) {
+			if ($('#newmessage').val().trim().length === 0)
+				disableConfirmLeave();
+		} else {
+			enableConfirmLeave();
+		}
+	});
+	$('#newmessage').removeAttr('rows').autosize().keyup(function() {
+		if ($(this).val().trim().length === 0) {
+			$('#makepost').attr('disabled', 'disabled').attr('title', 'You must type a message body.');
+			if ($('#newtitle').val().trim().length === 0)
+				disableConfirmLeave();
+		} else {
+			$('#makepost').removeAttr('disabled').removeAttr('title');
+			enableConfirmLeave();
+		}
+	});
+	$('#makepost').attr('type', 'button').attr('disabled', 'disabled').attr('title', 'You must type a message body.').click(function() {
+		$('#compose input[type=text], #compose textarea').attr('readonly', 'readonly');
+		$(this).attr('disabled', 'disabled');
+		var originalButtonText = $(this).val();
+		$(this).val('Submitting...');
+		$.ajax({
+			type: $('#compose').attr('method'),
+			url: $('#compose').attr('action'),
+			data: $('#compose').serialize(),
+			success: function(data) {
+				$('#dimmer').fadeOut(100);
+				$('#compose input[type=text], #compose textarea').removeAttr('readonly').val('');
+				$('#newmessage').trigger('autosize.resize');
+				$('#makepost').val(originalButtonText);
+
+				var newlyLoaded = $(data);
+				$('#compose').after(newlyLoaded);
+				$('.board').isotope('appended', newlyLoaded).isotope('reLayout');
+			}
+		});
+	});
 
 	$('.board').isotope({
 		itemSelector: '.note',

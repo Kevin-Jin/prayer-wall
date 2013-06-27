@@ -21,7 +21,7 @@ CREATE TABLE `posts` (
 	PRIMARY KEY (`postid`),
 	KEY (`poster`),
 	CONSTRAINT FOREIGN KEY (`poster`) REFERENCES `users` (`userid`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `cookies` ( 
 	`uniqueid` BIGINT(20) NOT NULL AUTO_INCREMENT, 

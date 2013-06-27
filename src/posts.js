@@ -8,7 +8,7 @@ function loadMore() {
 	loading = true;
 	$('#loading').css('display', 'block');
 	$.ajax({
-		type: "GET",
+		type: $('#nextpageform').attr('method'),
 		url: $('#nextpageform').attr('action'),
 		data: $('#nextpageform').serialize(),
 		success: function(data) {

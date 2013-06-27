@@ -14,7 +14,8 @@ CREATE TABLE `users` (
 
 CREATE TABLE `posts` (
 	`postid` INT(11) NOT NULL AUTO_INCREMENT,
-	`posttime` TIMESTAMP NOT NULL,
+	`posttime` INT(11) NOT NULL,
+	`title` VARCHAR(24),
 	`message` VARCHAR(255) NOT NULL,
 	`poster` INT(11),
 	PRIMARY KEY (`postid`),

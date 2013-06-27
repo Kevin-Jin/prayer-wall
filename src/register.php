@@ -11,6 +11,9 @@ function emailExists($email) {
 }
 
 function nickExists($nick) {
+	if (strcasecmp($nick, 'Anonymous') === 0)
+		return true;
+
 	require_once('includes/databaseManager.php');
 	$con = makeDatabaseConnection();
 	$ps = $con->prepare("SELECT 1 FROM `users` WHERE `displayname` = ?");

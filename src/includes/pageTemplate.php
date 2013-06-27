@@ -23,7 +23,7 @@ if (!isset($_SESSION['loggedInUserId'])) {
 					<tr>
 						<td><label for="usr">Email Address</label></td>
 						<td><label for="pwd">Password</label></td>
-						<td><a href="register.php"><input type="button" name="signup" value="Register" class="submit" id="register"></a></td>
+						<td><a id="register" href="register.php">Register</a></td>
 					</tr>
 					<tr>
 						<td><input type="text" id="usr" name="email" maxlength="254"></td>
@@ -33,6 +33,7 @@ if (!isset($_SESSION['loggedInUserId'])) {
 					<tr>
 						<td><input type="checkbox" id="remember" name="persistent" value="1"><label for="remember">Remember me</label></td>
 						<td><a href="#">I forgot my password</a></td>
+						<td></td>
 					</tr>
 				</table>
 			</form>

@@ -44,6 +44,7 @@ HEADEND;
 BODYEND;
 			}
 		} else {
+			$correct = false;
 			$head = <<<HEADEND
 
 		<meta http-equiv="Refresh" content="3; login.php" />

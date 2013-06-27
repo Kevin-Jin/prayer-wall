@@ -4,15 +4,24 @@ function fetchPosts(&$lastLoadedPost) {
 	require_once('includes/config.php');
 
 	$con = makeDatabaseConnection();
-	$ps = $con->prepare("SELECT `postid`,`posttime`,`message`,`poster` FROM `posts` WHERE `postid` < ? ORDER BY `postid` DESC LIMIT ?");
+	$ps = $con->prepare("SELECT `postid`,`posttime`,`title`,`message`,`displayname` FROM `posts` `p` LEFT JOIN `users` `u` on `poster` = `userid` WHERE `postid` < ? ORDER BY `postid` DESC LIMIT ?");
 	$upperbound = isset($lastLoadedPost) ? $lastLoadedPost : 0x80000000;
 	$ps->bind_param('ii', $upperbound, Config::getInstance()->notesPerPage);
 	$str = '';
 	if ($ps->execute()) {
-		$ps->bind_result($lastLoadedPost, $posttime, $message, $poster);
-		for ($i = 0; $ps->fetch(); $i++)
-			$str .= '				<div class="note">' . $message . '</div>
+		$ps->bind_result($lastLoadedPost, $posttime, $title, $message, $poster);
+		for ($i = 0; $ps->fetch(); $i++) {
+			$str .= '				<div class="note">';
+			if ($title)
+				$str .= '<h1>' . $title . '</h1>';
+			$str .= '<p>' . $message . '</p>';
+			if ($poster === null)
+				$str .= '<h2>Anonymous</h2></div>';
+			else
+				$str .= '<h2>' . $poster . '</h2></div>';
+			$str .= '
 ';
+		}
 	}
 	$ps->close();
 	if ($i < Config::getInstance()->notesPerPage) {

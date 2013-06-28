@@ -31,8 +31,7 @@ function loadMore() {
 
 function enableConfirmLeave() {
 	$(window).bind('beforeunload', function() {
-		if ($('#newmessage').val().trim().length !== 0 || $('#newtitle').val().trim().length !== 0)
-			return 'Your post has not yet been submitted. The draft will be discarded.';
+		return 'Your post has not yet been submitted. The draft will be discarded.';
 	});
 }
 
@@ -97,18 +96,21 @@ $(document).ready(function() {
 
 	$('body').append('<div id="dimmer"></div>').keyup(function(e) {
 		if ($('#dimmer').css('display') !== 'none' && e.keyCode === 27) {
-			$('#newmessage').val($('#newmessage').val().trim()).trigger('autosize.resize');;
+			$('#newmessage').trigger('autosize.resize');
 			$('#dimmer').fadeOut(100);
 			$('.board').isotope('reLayout');
 			$('textarea, input').blur();
 		}
 	});
 	$('#dimmer').click(function() {
-		$('#newmessage').val($('#newmessage').val().trim()).trigger('autosize.resize');;
+		$('#newmessage').trigger('autosize.resize');
 		$('#dimmer').fadeOut(100);
 		$('.board').isotope('reLayout');
 	});
 	$('#composecontainer').css('z-index', '3').append($('<input type="hidden" name="echo" value="1">')).click(function() {
+		$('#dimmer').fadeIn(200);
+	});
+	$('#newtitle, #newmessage').focus(function() {
 		$('#dimmer').fadeIn(200);
 	});
 	$('#newtitle').keyup(function() {
@@ -119,8 +121,14 @@ $(document).ready(function() {
 			enableConfirmLeave();
 		}
 	});
-	$('#newmessage').removeAttr('rows').autosize().keypress(function() {
-		return ($(this).val().trim().length < 21845);
+	$('#newmessage').removeAttr('rows').autosize({
+		callback: function() {
+			var composecontainer = $('#composecontainer');
+			if (composecontainer.outerHeight(true) > $('.board').height())
+				$('.board').height(composecontainer.outerHeight(true));
+		}
+	}).keypress(function() {
+		return ($(this).val().length < 21845);
 	}).keyup(function() {
 		if ($(this).val().trim().length === 0) {
 			$('#makepost').attr('disabled', 'disabled').attr('title', 'You must type a message body.');
@@ -145,6 +153,7 @@ $(document).ready(function() {
 				$('#compose input[type=text], #compose textarea').removeAttr('readonly').val('');
 				$('#newmessage').trigger('autosize.resize');
 				$('#makepost').val(originalButtonText).attr('title', 'You must type a message body.');
+				disableConfirmLeave();
 
 				var newlyLoaded = $(data);
 				$('#compose').after(newlyLoaded);

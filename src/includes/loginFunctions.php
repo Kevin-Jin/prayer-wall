@@ -35,8 +35,18 @@ function loadCookie() {
 	$con->close();
 }
 
+function generateRandomBin($length) {
+	if (function_exists('openssl_random_pseudo_bytes') && ($bin = openssl_random_pseudo_bytes($length)))
+		return $bin;
+
+	$bin = '';
+	for ($i = 0; $i < $length; $i++)
+		$bin .= chr(mt_rand(0, 255));
+	return $bin;
+}
+
 function createNewCookie($con) {
-	$newToken = bin2hex(openssl_random_pseudo_bytes(16));
+	$newToken = bin2hex(generateRandomBin(16));
 	$tokenHash = hashBcrypt($newToken);
 	$ps = $con->prepare("INSERT INTO `cookies` (`userid`,`tokenhash`) VALUES (?,?)");
 	$ps->bind_param('is', $_SESSION['loggedInUserId'], $tokenHash);

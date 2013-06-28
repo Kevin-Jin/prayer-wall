@@ -2,8 +2,8 @@
 function constructNoteElement($title, $message, $author, $timestamp) {
 	$str = '				<div class="note">';
 	if ($title)
-		$str .= '<h1>' . $title . '</h1>';
-	$str .= '<p>' . $message . '</p><h2>';
+		$str .= '<h1>' . str_replace(array("\r\n", "\r", "\n"), "<br />", htmlspecialchars($title, ENT_COMPAT | ENT_HTML401, 'UTF-8')) . '</h1>';
+	$str .= '<p>' . str_replace(array("\r\n", "\r", "\n"), "<br />", htmlspecialchars($message, ENT_COMPAT | ENT_HTML401, 'UTF-8')) . '</p><h2>';
 	if (!$author)
 		$str .= 'Anonymous';
 	else
@@ -64,9 +64,7 @@ if (isset($_POST['newtitle']) && isset($_POST['newnote'])) {
 		$_POST['newnote'] = stripslashes($_POST['newnote']);
 	}
 
-	$_POST['newtitle'] = str_replace(array("\r\n", "\r", "\n"), "<br />", htmlspecialchars(trim($_POST['newtitle']), ENT_COMPAT | ENT_HTML401, 'UTF-8'));
-	$_POST['newnote'] = str_replace(array("\r\n", "\r", "\n"), "<br />", htmlspecialchars(trim($_POST['newnote']), ENT_COMPAT | ENT_HTML401, 'UTF-8'));
-	if (!$_POST['newnote']) {
+	if (!trim($_POST['newnote'])) {
 		$error = 'Your message was not posted because it was empty.';
 	} else if (strlen($_POST['newnote']) > 21845) {
 		$error = 'Your message was not posted because it was too long. A message may be no longer than 21845 characters.';

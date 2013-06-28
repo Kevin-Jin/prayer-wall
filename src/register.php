@@ -30,19 +30,28 @@ function idcheck() {
 		require_once('hackingAttempt.php');
 
 	define("allowEntry", true);
-	if ($checkemail)
-		if (emailExists($_GET['checkemail']))
-			echo $_GET['checkemail'];
-	if ($checknick)
-		if (nickExists($_GET['checknick']))
-			echo $_GET['checknick'];
+	if ($checkemail) {
+		if (get_magic_quotes_gpc())  
+			$email = stripslashes($_GET['checkemail']);
+		else
+			$email = $_GET['checkemail'];
+
+		if (emailExists($email))
+			echo htmlspecialchars($email, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+	}
+	if ($checknick) {
+		if (get_magic_quotes_gpc())  
+			$nick = stripslashes($_GET['checknick']);
+		else
+			$nick = $_GET['checknick'];
+
+		if (nickExists($nick))
+			echo htmlspecialchars($nick, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+	}
 	echo '';
 }
 
  function emailValid($address) {
-	if (get_magic_quotes_gpc())  
-		$address = stripslashes($address);
-
 	if (strlen($address) > 254)
 		return false;
 	$localpart = true;
@@ -162,6 +171,13 @@ function commit() {
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 	$nick = $_POST['nick'];
+	
+	if (get_magic_quotes_gpc()) {
+		$email = stripslashes($email);
+		$password = stripslashes($password);
+		$nick = stripslashes($nick);
+	}
+
 	$allOk = true;
 	//validate on the server side in case JavaScript is disabled or client is spoofing
 	if ($allOk && !emailValid($email)) {
@@ -223,7 +239,7 @@ BODYEND;
 	}
 	if ($allOk) {
 		$_SESSION['loggedInUserId'] = makeAccount($email, $password, $nick);
-		$_SESSION['loggedInNick'] = $nick;
+		$_SESSION['loggedInNick'] = htmlspecialchars($nick, ENT_COMPAT | ENT_HTML401, 'UTF-8');;
 		$head = <<<HEADEND
 
 		<meta http-equiv="Refresh" content="3; index.php" />

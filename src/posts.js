@@ -119,7 +119,9 @@ $(document).ready(function() {
 			enableConfirmLeave();
 		}
 	});
-	$('#newmessage').removeAttr('rows').autosize().keyup(function() {
+	$('#newmessage').removeAttr('rows').autosize().keypress(function() {
+		return ($(this).val().trim().length < 21845);
+	}).keyup(function() {
 		if ($(this).val().trim().length === 0) {
 			$('#makepost').attr('disabled', 'disabled').attr('title', 'You must type a message body.');
 			if ($('#newtitle').val().trim().length === 0)
@@ -142,7 +144,7 @@ $(document).ready(function() {
 				$('#dimmer').fadeOut(100);
 				$('#compose input[type=text], #compose textarea').removeAttr('readonly').val('');
 				$('#newmessage').trigger('autosize.resize');
-				$('#makepost').val(originalButtonText);
+				$('#makepost').val(originalButtonText).attr('title', 'You must type a message body.');
 
 				var newlyLoaded = $(data);
 				$('#compose').after(newlyLoaded);

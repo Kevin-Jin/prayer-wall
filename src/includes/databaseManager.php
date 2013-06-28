@@ -4,6 +4,8 @@ if (!defined("allowEntry"))
 
 function makeDatabaseConnection() {
 	require_once('config.php');
-	return new mysqli('p:' . Config::getInstance()->dbHost, Config::getInstance()->dbUser, Config::getInstance()->dbPass, Config::getInstance()->dbName);
+	$con = new mysqli('p:' . Config::getInstance()->dbHost, Config::getInstance()->dbUser, Config::getInstance()->dbPass, Config::getInstance()->dbName);
+	$con->set_charset("UTF8");
+	return $con;
 }
 ?>

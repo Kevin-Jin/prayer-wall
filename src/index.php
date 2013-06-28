@@ -59,9 +59,18 @@ if (!isset($_SESSION['loggedInUserId']) && isset($_COOKIE['auth'])) {
 	loadCookie();
 }
 if (isset($_POST['newtitle']) && isset($_POST['newnote'])) {
-	$_POST['newtitle'] = str_replace(array("\r\n", "\r", "\n"), "<br />", htmlspecialchars(trim($_POST['newtitle']), ENT_COMPAT | ENT_XHTML, 'UTF-8'));
-	$_POST['newnote'] = str_replace(array("\r\n", "\r", "\n"), "<br />", htmlspecialchars(trim($_POST['newnote']), ENT_COMPAT | ENT_XHTML, 'UTF-8'));
-	if ($_POST['newnote']) {
+	if (get_magic_quotes_gpc()) {
+		$_POST['newtitle'] = stripslashes($_POST['newtitle']);
+		$_POST['newnote'] = stripslashes($_POST['newnote']);
+	}
+
+	$_POST['newtitle'] = str_replace(array("\r\n", "\r", "\n"), "<br />", htmlspecialchars(trim($_POST['newtitle']), ENT_COMPAT | ENT_HTML401, 'UTF-8'));
+	$_POST['newnote'] = str_replace(array("\r\n", "\r", "\n"), "<br />", htmlspecialchars(trim($_POST['newnote']), ENT_COMPAT | ENT_HTML401, 'UTF-8'));
+	if (!$_POST['newnote']) {
+		$error = 'Your message was not posted because it was empty.';
+	} else if (strlen($_POST['newnote']) > 21845) {
+		$error = 'Your message was not posted because it was too long. A message may be no longer than 21845 characters.';
+	} else {
 		$now = time();
 
 		require_once('includes/databaseManager.php');
@@ -71,8 +80,6 @@ if (isset($_POST['newtitle']) && isset($_POST['newnote'])) {
 		$ps->execute();
 		$ps->close();
 		$con->close();
-	} else {
-		$error = 'Your message was not posted because it was empty.';
 	}
 
 	if (isset($_POST['echo'])) {

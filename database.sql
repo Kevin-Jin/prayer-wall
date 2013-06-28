@@ -10,13 +10,13 @@ CREATE TABLE `users` (
 	PRIMARY KEY (`userid`),
 	KEY (`email`),
 	KEY (`displayname`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE `posts` (
 	`postid` INT(11) NOT NULL AUTO_INCREMENT,
 	`posttime` INT(11) NOT NULL,
 	`title` VARCHAR(24),
-	`message` VARCHAR(255) NOT NULL,
+	`message` TEXT NOT NULL,
 	`poster` INT(11),
 	PRIMARY KEY (`postid`),
 	KEY (`poster`),

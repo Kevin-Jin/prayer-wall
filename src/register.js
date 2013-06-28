@@ -4,9 +4,9 @@ var nickOk;
 
 function updateSubmitButton() {
 	if (!emailOk || !passwordOk || !nickOk)
-		$('#regsubmit').attr('disabled', 'disabled');
+		$('#submit').attr('disabled', 'disabled');
 	else
-		$('#regsubmit').removeAttr('disabled');
+		$('#submit').removeAttr('disabled');
 }
 
 function emailValid(address) {

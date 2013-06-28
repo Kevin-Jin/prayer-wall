@@ -28,7 +28,7 @@ function loadCookie() {
 
 	if ($correct) {
 		$_SESSION['loggedInUserId'] = $userid;
-		$_SESSION['loggedInNick'] = $displayname;
+		$_SESSION['loggedInNick'] = htmlspecialchars($displayname, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 		createNewCookie($con);
 	}
 
